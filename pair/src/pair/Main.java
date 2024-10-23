@@ -2,7 +2,7 @@ package pair;
 
 public class Main {
     public static void main(String[] args) {
-        /*Pair<Integer> pair1 = new Pair<>(1,3);
+        Pair<Integer> pair1 = new Pair<>(1,3);
         Pair<Integer> pair2 = new Pair<>(2,4);
 
         System.out.println("Equals: " + PairUtil.equals(pair1,pair2));
@@ -44,13 +44,6 @@ public class Main {
 
         System.out.println("Before swap: " + numberPair1);
         PairUtil.swap(numberPair1);
-        System.out.println("After swap: " + numberPair1);*/
-
-        Pair<Integer> pair1 = new Pair<>(1,null);
-        Pair<Integer> pair2 = new Pair<>(1,4);
-
-        System.out.println(PairUtil.equals(pair1,pair2));
-
-
+        System.out.println("After swap: " + numberPair1);
     }
 }

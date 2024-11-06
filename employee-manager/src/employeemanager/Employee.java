@@ -4,8 +4,11 @@ import employeemanager.position.Position;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Employee {
+    //private static int countId = 1;
+    private static final AtomicInteger countId = new AtomicInteger();
     private int id;
     private String name;
     private String surname;
@@ -15,27 +18,24 @@ public class Employee {
     private LocalDate lastSalaryChange;
 
 
-    public Employee(int id, String name, String surname, Position position, LocalDate dateOfEmployment, BigDecimal salary, LocalDate lastSalaryChange) {
-        this.id = id;
+    public Employee(String name, String surname, Position position, BigDecimal salary) {
+        this.id = countId.incrementAndGet();
         this.name = name;
         this.surname = surname;
         this.position = position;
-        this.dateOfEmployment = dateOfEmployment;
+        this.dateOfEmployment = LocalDate.now();
         if (salary.compareTo(position.getMaxSalary()) > 0 || salary.compareTo(position.getMinSalary()) < 0) {
             throw new RuntimeException("Заработная не может быть маньше - " + position.getMinSalary()
                     + " и больше - " + position.getMaxSalary());
         }
         this.salary = salary;
-        this.lastSalaryChange = lastSalaryChange;
+
+        this.lastSalaryChange = dateOfEmployment;
     }
 
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -86,16 +86,15 @@ public class Employee {
         this.lastSalaryChange = lastSalaryChange;
     }
 
+
     @Override
     public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+        return  id +
+                ". name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", position=" + position +
+                ", position=" + position.getName() +
                 ", dateOfEmployment=" + dateOfEmployment +
                 ", salary=" + salary +
-                ", lastSalaryChange=" + lastSalaryChange +
-                '}';
+                ", lastSalaryChange=" + lastSalaryChange;
     }
 }

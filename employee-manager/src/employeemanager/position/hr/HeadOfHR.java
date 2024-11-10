@@ -25,4 +25,8 @@ public class HeadOfHR implements Position {
     public BigDecimal getMaxSalary() {
         return BigDecimal.valueOf(1700);
     }
+    @Override
+    public String toString() {
+        return "HeadOfHR";
+    }
 }

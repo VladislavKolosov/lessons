@@ -25,4 +25,8 @@ public class JuniorDeveloper implements Position {
     public BigDecimal getMaxSalary() {
         return BigDecimal.valueOf(1000);
     }
+    @Override
+    public String toString() {
+        return "JuniorDeveloper";
+    }
 }

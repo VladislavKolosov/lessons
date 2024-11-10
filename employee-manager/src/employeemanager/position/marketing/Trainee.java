@@ -25,4 +25,8 @@ public class Trainee implements Position {
     public BigDecimal getMaxSalary() {
         return BigDecimal.valueOf(600);
     }
+    @Override
+    public String toString() {
+        return "Trainee";
+    }
 }

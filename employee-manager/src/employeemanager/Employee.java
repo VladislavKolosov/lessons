@@ -7,8 +7,7 @@ import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Employee {
-    //private static int countId = 1;
-    private static final AtomicInteger countId = new AtomicInteger();
+    private  static int countId;
     private int id;
     private String name;
     private String surname;
@@ -19,7 +18,7 @@ public class Employee {
 
 
     public Employee(String name, String surname, Position position, BigDecimal salary) {
-        this.id = countId.incrementAndGet();
+        this.id = ++countId;
         this.name = name;
         this.surname = surname;
         this.position = position;
@@ -29,7 +28,6 @@ public class Employee {
                     + " и больше - " + position.getMaxSalary());
         }
         this.salary = salary;
-
         this.lastSalaryChange = dateOfEmployment;
     }
 

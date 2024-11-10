@@ -25,4 +25,9 @@ public class Manager implements Position {
     public BigDecimal getMaxSalary() {
         return BigDecimal.valueOf(800);
     }
+
+    @Override
+    public String toString() {
+        return "Manager";
+    }
 }

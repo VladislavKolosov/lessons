@@ -26,4 +26,8 @@ public class Specialist implements Position {
     public BigDecimal getMaxSalary() {
         return BigDecimal.valueOf(1200);
     }
+    @Override
+    public String toString() {
+        return "Specialist";
+    }
 }

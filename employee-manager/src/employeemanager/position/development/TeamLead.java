@@ -25,4 +25,8 @@ public class TeamLead implements Position {
     public BigDecimal getMaxSalary() {
         return BigDecimal.valueOf(7000);
     }
+    @Override
+    public String toString() {
+        return "TeamLead";
+    }
 }

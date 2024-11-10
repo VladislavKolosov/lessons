@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class FileManager {
     public static List<Employee> employees = new ArrayList<>(){{
-        add(new Employee("Vladislav","Kolosov",new JuniorDeveloper(),BigDecimal.valueOf(400)));
+        add(new Employee("Vladislav","Kolosov",new MiddleDeveloper(),BigDecimal.valueOf(1500)));
     }};
 
     public static Map<String, Position> position = new HashMap<>() {{

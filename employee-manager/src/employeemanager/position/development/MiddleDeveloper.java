@@ -25,4 +25,8 @@ public class MiddleDeveloper implements Position {
     public BigDecimal getMaxSalary() {
         return BigDecimal.valueOf(2000);
     }
+    @Override
+    public String toString() {
+        return "MiddleDeveloper";
+    }
 }

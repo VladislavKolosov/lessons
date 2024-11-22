@@ -2,13 +2,18 @@ package employeemanager;
 
 import employeemanager.position.Position;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class Employee {
-    private  static int countId;
-    private int id;
+
+public class Employee implements Serializable {
+    @Serial
+    private final static long serialVersionUID =1l;
+
+    private static int countId;
+    private final int id;
     private String name;
     private String surname;
     private Position position;
@@ -36,12 +41,18 @@ public class Employee {
         return id;
     }
 
+    public static void setCountId(int countId) {
+        Employee.countId = countId;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name
+
+                = name;
     }
 
     public String getSurname() {
@@ -87,10 +98,11 @@ public class Employee {
 
     @Override
     public String toString() {
-        return  id +
-                ". name='" + name + '\'' +
+        return
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", position=" + position.getName() +
+                ", position=" + position +
                 ", dateOfEmployment=" + dateOfEmployment +
                 ", salary=" + salary +
                 ", lastSalaryChange=" + lastSalaryChange;

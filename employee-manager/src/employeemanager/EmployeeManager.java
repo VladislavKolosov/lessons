@@ -15,6 +15,7 @@ import java.util.Scanner;
 public class EmployeeManager {
     public static void main(String[] args) {
         EmployeeManager employeeManager = new EmployeeManager();
+        FileManager.readEmployees();
 
         Scanner scanner = new Scanner(System.in);
         boolean isExit = false;
@@ -36,17 +37,20 @@ public class EmployeeManager {
                     break;
                 case 2:
                     FileManager.addEmployee(employeeManager.createEmployee(FileManager.employees));
+                    FileManager.saveEmployees();
                     break;
                 case 3:
                     employeeManager.printAllEmployee(FileManager.employees);
                     if (!FileManager.employees.isEmpty()) {
                         FileManager.removeEmployee(employeeManager.selectEmployee(FileManager.employees, scanner.nextInt()));
+                        FileManager.saveEmployees();
                     }
                     break;
                 case 4:
                     employeeManager.printAllEmployee(FileManager.employees);
                     if (!FileManager.employees.isEmpty()) {
                         DepartmentManager.changeDepartment(employeeManager.selectEmployee(FileManager.employees, scanner.nextInt()), scanner);
+                        FileManager.saveEmployees();
                     }
                     break;
                 case 5:
@@ -55,6 +59,8 @@ public class EmployeeManager {
                         Employee employee = employeeManager.selectEmployee(FileManager.employees, scanner.nextInt());
                         System.out.println("Введите новую зарплату");
                         Accounting.changeSalary(employee, scanner.nextBigDecimal());
+
+                        FileManager.saveEmployees();
                     }
                     break;
 
@@ -62,12 +68,16 @@ public class EmployeeManager {
                     employeeManager.printAllEmployee(FileManager.employees);
                     if (!FileManager.employees.isEmpty()) {
                         DepartmentManager.raisePosition(employeeManager.selectEmployee(FileManager.employees, scanner.nextInt()), scanner);
+
+                        FileManager.saveEmployees();
                     }
                     break;
                 case 7:
                     employeeManager.printAllEmployee(FileManager.employees);
                     if (!FileManager.employees.isEmpty()) {
                         DepartmentManager.lowerPosition(employeeManager.selectEmployee(FileManager.employees, scanner.nextInt()), scanner);
+
+                        FileManager.saveEmployees();
                     }
                     break;
                 case 8:
@@ -117,8 +127,8 @@ public class EmployeeManager {
             return;
         }
         System.out.println("Список работающих сотрудников");
-        for (Employee emp : employees) {
-            System.out.println(emp);
+        for (int i = 1; i <= employees.size(); i++) {
+            System.out.println(i + ". " + employees.get(i-1));
         }
         System.out.println("__________");
     }

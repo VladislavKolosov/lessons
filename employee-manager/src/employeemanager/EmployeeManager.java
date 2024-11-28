@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +16,9 @@ import java.util.Scanner;
 public class EmployeeManager {
     public static void main(String[] args) {
         EmployeeManager employeeManager = new EmployeeManager();
-        FileManager.readEmployees();
+        FileManager fileManager = new FileManager();
+        Accounting accounting = new Accounting();
+        DepartmentManager departmentManager = new DepartmentManager(fileManager,accounting);
 
         Scanner scanner = new Scanner(System.in);
         boolean isExit = false;
@@ -33,51 +36,50 @@ public class EmployeeManager {
 
             switch (scanner.nextInt()) {
                 case 1:
-                    employeeManager.printAllEmployee(FileManager.employees);
+                    employeeManager.printAllEmployee(fileManager.getEmployees());
                     break;
                 case 2:
-                    FileManager.addEmployee(employeeManager.createEmployee(FileManager.employees));
-                    FileManager.saveEmployees();
+                    fileManager.addEmployee(employeeManager.createEmployee(fileManager.getEmployees()));
+                    fileManager.saveEmployees();
                     break;
                 case 3:
-                    employeeManager.printAllEmployee(FileManager.employees);
-                    if (!FileManager.employees.isEmpty()) {
-                        FileManager.removeEmployee(employeeManager.selectEmployee(FileManager.employees, scanner.nextInt()));
-                        FileManager.saveEmployees();
+                    employeeManager.printAllEmployee(fileManager.getEmployees());
+                    if (!fileManager.getEmployees().isEmpty()) {
+                        fileManager.removeEmployee(employeeManager.selectEmployee(fileManager.getEmployees(), scanner.nextInt()));
+                        fileManager.saveEmployees();
                     }
                     break;
                 case 4:
-                    employeeManager.printAllEmployee(FileManager.employees);
-                    if (!FileManager.employees.isEmpty()) {
-                        DepartmentManager.changeDepartment(employeeManager.selectEmployee(FileManager.employees, scanner.nextInt()), scanner);
-                        FileManager.saveEmployees();
+                    employeeManager.printAllEmployee(fileManager.getEmployees());
+                    if (!fileManager.getEmployees().isEmpty()) {
+                        departmentManager.changeDepartment(employeeManager.selectEmployee(fileManager.getEmployees(), scanner.nextInt()), scanner);
+                        fileManager.saveEmployees();
                     }
                     break;
                 case 5:
-                    employeeManager.printAllEmployee(FileManager.employees);
-                    if (!FileManager.employees.isEmpty()) {
-                        Employee employee = employeeManager.selectEmployee(FileManager.employees, scanner.nextInt());
+                    employeeManager.printAllEmployee(fileManager.getEmployees());
+                    if (!fileManager.getEmployees().isEmpty()) {
+                        Employee employee = employeeManager.selectEmployee(fileManager.getEmployees(), scanner.nextInt());
                         System.out.println("Введите новую зарплату");
-                        Accounting.changeSalary(employee, scanner.nextBigDecimal());
+                        accounting.changeSalary(employee, scanner.nextBigDecimal());
 
-                        FileManager.saveEmployees();
+                        fileManager.saveEmployees();
                     }
                     break;
 
                 case 6:
-                    employeeManager.printAllEmployee(FileManager.employees);
-                    if (!FileManager.employees.isEmpty()) {
-                        DepartmentManager.raisePosition(employeeManager.selectEmployee(FileManager.employees, scanner.nextInt()), scanner);
-
-                        FileManager.saveEmployees();
+                    employeeManager.printAllEmployee(fileManager.getEmployees());
+                    if (!fileManager.getEmployees().isEmpty()) {
+                        departmentManager.raisePosition(employeeManager.selectEmployee(fileManager.getEmployees(), scanner.nextInt()), scanner);
+                        fileManager.saveEmployees();
                     }
                     break;
                 case 7:
-                    employeeManager.printAllEmployee(FileManager.employees);
-                    if (!FileManager.employees.isEmpty()) {
-                        DepartmentManager.lowerPosition(employeeManager.selectEmployee(FileManager.employees, scanner.nextInt()), scanner);
+                    employeeManager.printAllEmployee(fileManager.getEmployees());
+                    if (!fileManager.getEmployees().isEmpty()) {
+                        departmentManager.lowerPosition(employeeManager.selectEmployee(fileManager.getEmployees(), scanner.nextInt()), scanner);
 
-                        FileManager.saveEmployees();
+                        fileManager.saveEmployees();
                     }
                     break;
                 case 8:
@@ -99,7 +101,7 @@ public class EmployeeManager {
         String surname = sc.nextLine();
 
         System.out.println("Введите позицию");
-        Position position = FileManager.position.get(sc.nextLine().toLowerCase());
+        Position position = FileManager.getPosition().get(sc.nextLine().toLowerCase());
 
         System.out.println("Введите зарплату");
         BigDecimal salary = sc.nextBigDecimal();
@@ -107,16 +109,6 @@ public class EmployeeManager {
         return new Employee(name, surname, position, salary);
     }
 
-    /*public Employee removeEmployee(List<Employee> employees, int employeeNumber) {
-        return employees.get(--employeeNumber);
-    }
-
-    public Employee changeDepartment(List<Employee> employees, int employeeNumber) {
-        return employees.get(--employeeNumber);
-    }
-    public Employee changeSalary(List<Employee> employees, int employeeNumber){
-        return employees.get(--employeeNumber);
-    }*/
     public Employee selectEmployee(List<Employee> employees, int employeeNumber) {
         return employees.get(--employeeNumber);
     }
@@ -128,7 +120,7 @@ public class EmployeeManager {
         }
         System.out.println("Список работающих сотрудников");
         for (int i = 1; i <= employees.size(); i++) {
-            System.out.println(i + ". " + employees.get(i-1));
+            System.out.println(i + ". " + employees.get(i - 1));
         }
         System.out.println("__________");
     }

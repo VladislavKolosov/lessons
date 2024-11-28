@@ -7,7 +7,15 @@ import java.util.*;
 
 
 public class DepartmentManager {
-    public static void changeDepartment(Employee employee, Scanner scanner) {
+    private FileManager fileManager;
+    private Accounting accounting;
+
+    public DepartmentManager(FileManager fileManager, Accounting accounting) {
+        this.fileManager = fileManager;
+        this.accounting = accounting;
+    }
+
+    public void changeDepartment(Employee employee, Scanner scanner) {
         List<Department> transferDepartments = transferDepartments(employee);
 
         int departmentChoice = selectOption(transferDepartments, scanner);
@@ -21,7 +29,7 @@ public class DepartmentManager {
         employee.setLastSalaryChange(LocalDate.now());
     }
 
-    private static List<Department> transferDepartments(Employee employee) {
+    private List<Department> transferDepartments(Employee employee) {
         List<Department> transferDepartments = new ArrayList<>();
         for (Department dep : Department.values()) {
             if (!employee.getPosition().getDepartment().equals(dep)) {
@@ -31,9 +39,9 @@ public class DepartmentManager {
         return transferDepartments;
     }
 
-    private static List<Position> searchPosition(List<Department> transferDepartments, int departmentChoice) {
+    private List<Position> searchPosition(List<Department> transferDepartments, int departmentChoice) {
         List<Position> selectPosition = new ArrayList<>();
-        for (Position position : FileManager.position.values()) {
+        for (Position position : FileManager.getPosition().values()) {
             if (position.getDepartment().equals(transferDepartments.get(departmentChoice))) {
                 selectPosition.add(position);
             }
@@ -41,7 +49,7 @@ public class DepartmentManager {
         return selectPosition;
     }
 
-    private static <T> int selectOption(List<T> selectOption, Scanner scanner) {
+    private <T> int selectOption(List<T> selectOption, Scanner scanner) {
         System.out.println("Выберите: ");
         for (int i = 0; i < selectOption.size(); i++) {
             System.out.println((i + 1) + ". " + selectOption.get(i).toString());
@@ -71,14 +79,14 @@ public class DepartmentManager {
         Accounting.changeSalary(employee, scanner.nextBigDecimal());
     }*/
 
-    public static void lowerPosition(Employee employee, Scanner scanner) {
+    public void lowerPosition(Employee employee, Scanner scanner) {
         Department department = employee.getPosition().getDepartment();
 
         List<Position> positions = selectPositions(employee, department, false);
 
         if (positions.isEmpty()) {
             System.out.println("Понижать некуда, сотрудник уволены");
-            FileManager.removeEmployee(employee);
+            fileManager.removeEmployee(employee);
             return;
         }
 
@@ -87,10 +95,10 @@ public class DepartmentManager {
         System.out.println("Понижение, новая позиция - " + position.getName());
         employee.setPosition(position);
         System.out.print("Введите зарплату на новой позиции: ");
-        Accounting.changeSalary(employee, scanner.nextBigDecimal());
+        accounting.changeSalary(employee, scanner.nextBigDecimal());
     }
 
-    public static void raisePosition(Employee employee, Scanner scanner) {
+    public void raisePosition(Employee employee, Scanner scanner) {
         Department department = employee.getPosition().getDepartment();
 
         List<Position> positions = selectPositions(employee, department, true);
@@ -104,10 +112,10 @@ public class DepartmentManager {
         System.out.println("Повышение, новая позиция - " + position.getName());
         employee.setPosition(position);
         System.out.print("Введите зарплату на новой позиции: ");
-        Accounting.changeSalary(employee, scanner.nextBigDecimal());
+        accounting.changeSalary(employee, scanner.nextBigDecimal());
     }
 
-    private static Position updatePosition(List<Position> positions, Boolean isRaise) {
+    private Position updatePosition(List<Position> positions, Boolean isRaise) {
         Position position = positions.get(0);
         for (Position pos : positions) {
             boolean condition = isRaise
@@ -120,9 +128,9 @@ public class DepartmentManager {
         return position;
     }
 
-    private static List<Position> selectPositions(Employee employee, Department department, boolean isRaise) {
+    private List<Position> selectPositions(Employee employee, Department department, boolean isRaise) {
         List<Position> allPosition = new ArrayList<>();
-        for (Position position : FileManager.position.values()) {
+        for (Position position : FileManager.getPosition().values()) {
             boolean condition = isRaise
                     ? position.getMinSalary().compareTo(employee.getPosition().getMinSalary()) > 0
                     : position.getMinSalary().compareTo(employee.getPosition().getMinSalary()) < 0;

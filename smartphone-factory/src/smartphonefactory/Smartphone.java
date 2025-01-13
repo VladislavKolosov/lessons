@@ -14,9 +14,11 @@ public class Smartphone implements Cloneable {
         this.screenSize = screenSize;
     }
 
-    @Override
-    protected Smartphone clone() throws CloneNotSupportedException {
-        return (Smartphone) super.clone();
+    public Smartphone(Smartphone copySmartphone){
+        this.phoneName = copySmartphone.phoneName;
+        this.model = copySmartphone.model;
+        this.memoryCapacity = copySmartphone.memoryCapacity;
+        this.screenSize = copySmartphone.screenSize;
     }
 
     public int getSmartphoneId() {
@@ -57,6 +59,16 @@ public class Smartphone implements Cloneable {
 
     public void setScreenSize(double screenSize) {
         this.screenSize = screenSize;
+    }
+
+    @Override
+    public String toString() {
+        return "Smartphone{" +
+                "phoneName='" + phoneName + '\'' +
+                ", model='" + model + '\'' +
+                ", memoryCapacity=" + memoryCapacity +
+                ", screenSize=" + screenSize +
+                '}';
     }
 }
 

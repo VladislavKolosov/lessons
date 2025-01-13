@@ -66,4 +66,10 @@ public class Order {
     public void setNumberOfDevice(int numberOfDevice) {
         this.numberOfDevice = numberOfDevice;
     }
+
+    @Override
+    public String toString() {
+        return "Order " +  "smartphone=" + smartphone;
+
+    }
 }

@@ -1,8 +1,10 @@
 package smartphonefactory;
 
+import smartphonefactory.smartphone.Smartphone;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,7 +37,17 @@ public class SmartphoneFactory {
         for (int i = 0; i < conveyorCount; i++) {
             produce.submit(() -> {
                 for (int j = 0; j < numberOfTelephone; j++) {
-                    Smartphone s = new Smartphone(order.getSmartphone());
+
+                    Class<?> clazz = order.getSmartphone().getClass();
+                    try {
+                        Constructor<?> constructor = clazz.getConstructor(Smartphone.class);
+                        constructor.newInstance(order.getSmartphone());
+
+                    } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
+                             IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {

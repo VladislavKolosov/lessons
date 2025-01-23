@@ -1,5 +1,6 @@
 package smartphonefactory;
 
+import smartphonefactory.smartphone.Smartphone;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

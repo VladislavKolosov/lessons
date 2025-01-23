@@ -1,6 +1,10 @@
 package smartphonefactory;
 
-import java.util.Scanner;
+import smartphonefactory.smartphone.Smartphone;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class Application {
     public static void main(String[] args) {
@@ -9,12 +13,11 @@ public class Application {
         Application application = new Application();
         SmartphoneFactory smartphoneFactory = new SmartphoneFactory();
 
-
-        while(isExit){
+        while (isExit) {
             System.out.println("1. Сделать заказ");
             System.out.println("0. Выход");
 
-            switch (scanner.nextInt()){
+            switch (scanner.nextInt()) {
                 case 1:
                     Order order = application.createOrder(scanner);
                     smartphoneFactory.addOrder(order);
@@ -26,23 +29,34 @@ public class Application {
             }
         }
     }
-    private Order createOrder(Scanner scanner){
+
+    private Order createOrder(Scanner scanner) {
+        FileSearching fileSearching = new FileSearching();
+
+        System.out.println("Количество телефонов ");
+        int numberOfTelephone = scanner.nextInt();
+
+        List<Class<?>> classList = fileSearching.selectOfPriceCategory(scanner);
+        for (int i = 1; i <= classList.size(); i++) {
+            System.out.println(i + ". " + classList.get(i - 1).getSimpleName());
+        }
+
+        int smartphoneChoice = scanner.nextInt() - 1;
         scanner.nextLine();
-        System.out.println("Название телефона");
+
+        System.out.println("Введите название телефона");
         String phoneName = scanner.nextLine();
 
-        System.out.println("Модель телефона");
+        System.out.println("Введите модель телефона");
         String phoneModel = scanner.nextLine();
 
-        System.out.println("Объем памяти телефона");
-        int phoneMemoryCapacity = scanner.nextInt();
+        try {
+            Constructor<?> constructor = classList.get(smartphoneChoice).getConstructor(String.class,String.class);
+            Smartphone smartphone = (Smartphone) constructor.newInstance(phoneName,phoneModel);
 
-        System.out.println("Размер экрана телефона");
-        double phoneScreenSize = scanner.nextDouble();
-
-        System.out.println("Количество телефонов в заказе");
-        int numberOfDevice = scanner.nextInt();
-
-        return new Order(new Smartphone(phoneName,phoneModel,phoneMemoryCapacity,phoneScreenSize), numberOfDevice);
+            return new Order(smartphone,numberOfTelephone);
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

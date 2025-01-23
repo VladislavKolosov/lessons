@@ -1,6 +1,6 @@
-package smartphonefactory;
+package smartphonefactory.smartphone;
 
-public class Smartphone implements Cloneable {
+public abstract class Smartphone {
     private int smartphoneId;
     private String phoneName;
     private String model;
@@ -14,7 +14,7 @@ public class Smartphone implements Cloneable {
         this.screenSize = screenSize;
     }
 
-    public Smartphone(Smartphone copySmartphone){
+    public Smartphone(Smartphone copySmartphone) {
         this.phoneName = copySmartphone.phoneName;
         this.model = copySmartphone.model;
         this.memoryCapacity = copySmartphone.memoryCapacity;
@@ -71,4 +71,3 @@ public class Smartphone implements Cloneable {
                 '}';
     }
 }
-

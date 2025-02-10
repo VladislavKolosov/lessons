@@ -1,7 +1,6 @@
 package smartphonefactory.smartphone;
 
 public abstract class Smartphone {
-    private int smartphoneId;
     private String phoneName;
     private String model;
     private int memoryCapacity;
@@ -19,14 +18,6 @@ public abstract class Smartphone {
         this.model = copySmartphone.model;
         this.memoryCapacity = copySmartphone.memoryCapacity;
         this.screenSize = copySmartphone.screenSize;
-    }
-
-    public int getSmartphoneId() {
-        return smartphoneId;
-    }
-
-    public void setSmartphoneId(int smartphoneId) {
-        this.smartphoneId = smartphoneId;
     }
 
     public String getPhoneName() {

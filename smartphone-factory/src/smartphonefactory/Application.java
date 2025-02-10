@@ -1,17 +1,23 @@
 package smartphonefactory;
 
+import smartphonefactory.builder.SmartphoneBuilder;
+import smartphonefactory.director.SmartphoneDirector;
+import smartphonefactory.file.FileSearching;
+import smartphonefactory.file.OrderHistoryWriter;
 import smartphonefactory.smartphone.Smartphone;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class Application {
+public class Application implements Observer{
     public static void main(String[] args) {
         boolean isExit = true;
         Scanner scanner = new Scanner(System.in);
         Application application = new Application();
         SmartphoneFactory smartphoneFactory = new SmartphoneFactory();
+
+        smartphoneFactory.addObserver(application);
 
         while (isExit) {
             System.out.println("1. Сделать заказ");
@@ -51,12 +57,23 @@ public class Application {
         String phoneModel = scanner.nextLine();
 
         try {
-            Constructor<?> constructor = classList.get(smartphoneChoice).getConstructor(String.class,String.class);
-            Smartphone smartphone = (Smartphone) constructor.newInstance(phoneName,phoneModel);
+            Class<?> clazz =  classList.get(smartphoneChoice);
+            String builderClassName = clazz.getName() + "$" + clazz.getSimpleName() + "Builder";
+            Constructor<?> constructor = Class.forName(builderClassName).getConstructor();
 
-            return new Order(smartphone,numberOfTelephone);
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            SmartphoneDirector smartphoneDirector = new SmartphoneDirector((SmartphoneBuilder) constructor.newInstance());
+            Smartphone smartphone = smartphoneDirector.constructSmartphone(phoneName,phoneModel);
+
+            return new Order(smartphone, numberOfTelephone);
+
+        } catch (NoSuchMethodException | ClassNotFoundException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+       OrderHistoryWriter.writingResult((String) arg);
     }
 }

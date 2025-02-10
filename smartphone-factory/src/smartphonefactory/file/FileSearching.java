@@ -1,4 +1,4 @@
-package smartphonefactory;
+package smartphonefactory.file;
 
 import smartphonefactory.pricing.annotations.BudgetSmartphone;
 import smartphonefactory.pricing.annotations.FlagshipSmartphone;

@@ -5,12 +5,13 @@ import smartphonefactory.smartphone.Smartphone;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
+import java.util.Observable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class SmartphoneFactory {
+public class SmartphoneFactory extends Observable {
     private final LinkedBlockingQueue<Order> orders = new LinkedBlockingQueue<>();
     private final int conveyorCount = Runtime.getRuntime().availableProcessors();
     private final ExecutorService produce = Executors.newFixedThreadPool(conveyorCount);
@@ -18,7 +19,7 @@ public class SmartphoneFactory {
 
     public void addOrder(Order order) {
         orders.add(order);
-        System.out.println(orders);
+
         processOrder();
     }
 
@@ -64,7 +65,11 @@ public class SmartphoneFactory {
             Thread.currentThread().interrupt();
         }
 
-        System.out.println("Заказ от " + order.getOrderDateTime().format(order.getFormatter()) +
-                " в количестве " + order.getNumberOfDevice() + " выполнен " + LocalDateTime.now().format(order.getFormatter()));
+        String message = "Заказ от " + order.getOrderDateTime().format(order.getFormatter()) +
+                " в количестве " + order.getNumberOfDevice() + " выполнен " +
+                LocalDateTime.now().format(order.getFormatter());
+
+        setChanged();
+        notifyObservers(message);
     }
 }

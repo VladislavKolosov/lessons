@@ -14,6 +14,16 @@ public class Order {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    public Order(Smartphone smartphone, int numberOfDevice) {
+        this.orderDateTime = LocalDateTime.now();
+        this.smartphone = smartphone;
+        this.numberOfDevice = numberOfDevice;
+    }
+
+    public Order() {
+        this.orderDateTime = LocalDateTime.now();
+    }
+
     public DateTimeFormatter getFormatter() {
         return formatter;
     }
@@ -21,13 +31,6 @@ public class Order {
     public void setFormatter(DateTimeFormatter formatter) {
         this.formatter = formatter;
     }
-
-    public Order(Smartphone smartphone, int numberOfDevice) {
-        this.orderDateTime = LocalDateTime.now();
-        this.smartphone = smartphone;
-        this.numberOfDevice = numberOfDevice;
-    }
-
     public int getOrderId() {
         return orderId;
     }

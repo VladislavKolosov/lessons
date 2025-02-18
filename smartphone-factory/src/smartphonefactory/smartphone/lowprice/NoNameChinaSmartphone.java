@@ -48,6 +48,5 @@ public class NoNameChinaSmartphone extends Smartphone {
         public Smartphone build() {
             return new NoNameChinaSmartphone(phoneName, model, memoryCapacity, screenSize);
         }
-
     }
 }

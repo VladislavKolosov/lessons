@@ -2,6 +2,7 @@ package smartphonefactory;
 
 import smartphonefactory.smartphone.Smartphone;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
@@ -18,22 +19,37 @@ public class SmartphoneFactory extends Observable {
     private final ExecutorService processOrder = Executors.newSingleThreadExecutor();
 
     public void addOrder(Order order) {
+        if (order.getNumberOfDevice() == 0){
+            return;
+        }
         orders.add(order);
+
+        String addToOrderMessage = "Заказ от " + order.getOrderDateTime().format(order.getFormatter()) +
+                " в количестве " + order.getNumberOfDevice() + " добавлен " +
+                LocalDateTime.now().format(order.getFormatter());
+        setChanged();
+        notifyObservers(addToOrderMessage);
 
         processOrder();
     }
 
     private void processOrder() {
-        processOrder.submit(() -> {
-            Order order = orders.poll();
-            produce(order);
-        });
+            processOrder.submit(() -> {
+                Order order = orders.poll();
+                produce(order);
+            });
     }
 
     private void produce(Order order) {
         int numberOfTelephone = order.getNumberOfDevice() / conveyorCount;
-        System.out.println("Выполнение заказа: " + order);
+        String startProduceMessage = "Заказ от " + order.getOrderDateTime().format(order.getFormatter()) +
+                " в количестве " + order.getNumberOfDevice() + " начал выполняться " +
+                LocalDateTime.now().format(order.getFormatter());
 
+        setChanged();
+        notifyObservers(startProduceMessage);
+
+        order.setOrderStatus(OrderStatus.PROCESS);
         CountDownLatch latch = new CountDownLatch(conveyorCount);
         for (int i = 0; i < conveyorCount; i++) {
             produce.submit(() -> {
@@ -65,11 +81,12 @@ public class SmartphoneFactory extends Observable {
             Thread.currentThread().interrupt();
         }
 
-        String message = "Заказ от " + order.getOrderDateTime().format(order.getFormatter()) +
+        order.setOrderStatus(OrderStatus.COMPLETE);
+        String endProduceMessage = "Заказ от " + order.getOrderDateTime().format(order.getFormatter()) +
                 " в количестве " + order.getNumberOfDevice() + " выполнен " +
                 LocalDateTime.now().format(order.getFormatter());
 
         setChanged();
-        notifyObservers(message);
+        notifyObservers(endProduceMessage);
     }
 }

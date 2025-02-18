@@ -1,11 +1,13 @@
 package smartphonefactory;
 
+import org.w3c.dom.ls.LSOutput;
 import smartphonefactory.builder.SmartphoneBuilder;
 import smartphonefactory.director.SmartphoneDirector;
 import smartphonefactory.file.FileSearching;
 import smartphonefactory.file.OrderHistoryWriter;
 import smartphonefactory.smartphone.Smartphone;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -63,7 +65,6 @@ public class Application implements Observer{
 
             SmartphoneDirector smartphoneDirector = new SmartphoneDirector((SmartphoneBuilder) constructor.newInstance());
             Smartphone smartphone = smartphoneDirector.constructSmartphone(phoneName,phoneModel);
-
             return new Order(smartphone, numberOfTelephone);
 
         } catch (NoSuchMethodException | ClassNotFoundException | InvocationTargetException | InstantiationException |
@@ -74,6 +75,11 @@ public class Application implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-       OrderHistoryWriter.writingResult((String) arg);
+
+        try {
+            OrderHistoryWriter.writingResult((String) arg);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
